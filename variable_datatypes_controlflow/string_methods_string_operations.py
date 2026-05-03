@@ -1,5 +1,8 @@
 
 # =====================================================
+from doctest import Example
+
+
 print("-----Whitespace Removal Example------")
 # =====================================================
 text = "   Hello World   "
@@ -185,6 +188,13 @@ text = "   "
 print("Original:", repr(text))
 print("Is whitespace?", text.isspace())
 
+# =====================================================
+print("-----isspace() Non-Whitespace Example------")
+# =====================================================
+text = "Hello"
+print("Original:", repr(text))
+print("Is whitespace?", text.isspace())
+
 
 # =====================================================
 print("-----Length of String Example------")
@@ -262,7 +272,7 @@ print(f"Hello, my name is {name} and I am {age} years old.")
 print("-----String Formatting with f-strings and Alignment Example------")
 # =====================================================
 name = "Zumom Hossain"
-age = 28
+age = 28 
 print(f"Hello, my name is {name} and I am {age} years old.")
 
 # =====================================================
@@ -295,6 +305,7 @@ text = "Hello World"
 print("Original:", text)
 print("First character:", text[0])
 print("Last character:", text[-1])
+print("Character at index 7:", text[7])
 print("Last five characters:", text[6:11])
 print("First five characters:", text[0:5])
 
@@ -318,3 +329,17 @@ print("-----String Length Example------")
 text = "Hello World"
 print("Length of the string:", len(text))
 
+
+
+
+#====================================================
+print("----- multiple methods added together example Example------")
+#====================================================
+
+text = "   Hello World   "
+
+text.strip()                            # "Hello World"
+text.strip().lower()                    # "hello world"
+text.strip().lower().replace("world", "python")  # "hello python"
+print("Original:", text)
+print("Modified:", text.strip().lower().replace("world", "python"))
