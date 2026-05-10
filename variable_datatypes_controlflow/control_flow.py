@@ -11,7 +11,10 @@ if age >= 18:
 else:
     print("You are a minor.")
 
-# if-elif-else Condition
+#========================
+print("if-elif-else Condition")
+#========================
+
 age = 70
 if age < 18:
     print("You are a minor.")
@@ -19,6 +22,26 @@ elif age < 70:
     print("You are an adult.")
 else:
     print("You are a senior citizen.")
+
+# =========================
+print("Nested if-else Condition")
+#========================
+marks = int(input("Enter marks: "))
+
+if marks > 100:
+    print("Invalid marks!")
+elif marks >= 80 and marks <= 100:
+    print("Grade: A+")
+elif marks >= 70 and marks < 80:
+    print("Grade: A")
+elif marks >= 60 and marks < 70:
+    print("Grade: B")
+elif marks >= 50 and marks < 60:
+    print("Grade: C")
+else:
+    print("Grade: F")
+
+
 
 # Logical Operators and
 name = "Rasel"
@@ -100,3 +123,19 @@ for i in range(1, 10):
         continue
     print(i)
 print("Loop ended!")
+
+
+#========================
+print("Nested loops")
+#==========================
+age = int(input("Enter age: "))
+has_nid = input("Have NID? (yes/no): ")
+
+if age >= 18:
+    print("Age OK!")
+    if has_nid == "yes":
+        print("You can vote!")
+    else:
+        print("No NID!")
+else:
+    print("Too young!")
