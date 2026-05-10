@@ -6,6 +6,7 @@
 print("Integer examples")
 #====================
 
+
 age = 20
 year = 2024
 temperature = -5

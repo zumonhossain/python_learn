@@ -139,3 +139,60 @@ if age >= 18:
         print("No NID!")
 else:
     print("Too young!")
+
+
+
+
+
+
+
+'''
+- user input → member or not, total amount
+
+- if
+-- member and total amount between 15000 and 20000 
+   → Discount 500 yen
+
+-- member and total amount between 20001 and 500000 
+   → Discount 3% of total amount
+
+-- member and total amount above 500000 
+   → Discount 6% of total amount
+
+- calculate the final bill
+
+'''
+
+is_member = input("You are a member (yes/no): ").lower();
+total_amount = int(input("total amount: "));
+total_discount_amount = 0;
+
+if is_member == "yes":
+    if total_amount >= 15000 and total_amount <= 20000:
+        total_discount_amount = 500
+    elif total_amount >= 20000 and total_amount <= 50000:
+        total_discount_amount = total_amount * 3/100
+    elif total_amount > 50000:
+        total_discount_amount = total_amount * 6/100
+
+subtotal_amount = total_amount - total_discount_amount;
+print("Total Amount: ", subtotal_amount);
+
+
+# =========================
+print("Ternary Operator")
+#==========================
+
+age = 20
+
+result = "Adult" if age >= 18 else "Not Adult"
+print(result)
+
+
+
+
+
+
+
+
+
