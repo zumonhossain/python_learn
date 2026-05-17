@@ -1,6 +1,6 @@
-email = input("Enter email: ")
+email = input("Enter Your Email:")
 
-if email.find("@") != -1 and email.find(".com") != -1:
+if email.count("@") == 1 and email.endswith(".com"):
     print("Valid Email")
 else:
     print("Invalid Email")
