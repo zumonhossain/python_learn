@@ -4,3 +4,5 @@ print("First seat:", given_seats[0], "|", "Last seat:", given_seats[-1]);
 print("Booked seats:", booked_seats);
 if len(booked_seats) == 3:
 	print("Booking confirmed for 3 seats!");
+else:
+	print("Booking failed");
