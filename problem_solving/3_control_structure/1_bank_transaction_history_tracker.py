@@ -1,16 +1,13 @@
 balance = 100000
 
-# Lists
 transaction_types = []
 transaction_amounts = []
 
-# Counters
 deposit_count = 0
 withdraw_count = 0
 
 print("Opening Balance:", balance)
 
-# Taking transactions
 while True:
 
     t_type = input("Enter transaction type (deposit/withdraw or 'done'): ")
@@ -22,7 +19,6 @@ while True:
 
     t_type = t_type.upper()
 
-    # Deposit
     if t_type == "DEPOSIT":
         balance += amount
 
@@ -31,7 +27,6 @@ while True:
 
         deposit_count += 1
 
-    # Withdraw
     elif t_type == "WITHDRAW":
 
         if amount > balance:
@@ -48,8 +43,6 @@ while True:
     else:
         print("Invalid transaction type")
 
-
-# Printing History
 print("=" * 44)
 print("TRANSACTION HISTORY")
 print("=" * 44)
