@@ -43,12 +43,12 @@ while True:
     else:
         print("Invalid transaction type")
 
-print("=" * 44)
+print("=========================================================")
 print("TRANSACTION HISTORY")
-print("=" * 44)
+print("=========================================================")
 
 print("No. | Type | Amount | Balance")
-print("-" * 44)
+print("------------------------------------------------")
 
 i = 0
 running_balance = 100000
@@ -70,7 +70,7 @@ while i < len(transaction_types):
 
     i += 1
 
-print("-" * 44)
+print("------------------------------------------------")
 
 print("Total Deposits :", deposit_count)
 print("Total Withdrawals:", withdraw_count)

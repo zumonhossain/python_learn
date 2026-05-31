@@ -5,12 +5,12 @@ records = [
     ["riku tanaka", 26, 2500]
 ]
 
-print("=" * 49)
+print("=====================================================")
 print("MONTHLY PAYROLL REPORT")
-print("=" * 49)
+print("=====================================================")
 
 print("Name | Days | Daily Wage | Salary | Status")
-print("-" * 49)
+print("-------------------------------------------------")
 
 i = 0
 total_payroll = 0
