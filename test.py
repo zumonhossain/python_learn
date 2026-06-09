@@ -1,6 +1,7 @@
-password = input("Enter password: ");
+age = int(input("Enter age: "));
+country = input("Enter country: ").lower();
 
-if not password.isalpha() and not password.isdigit() and len(password) >= 8:
-	print("Strong Password");
+if age >= 18 or country == "japan":
+	print("Access Granted");
 else:
-	print("Weak Password");
+	print("Access Denied");  
