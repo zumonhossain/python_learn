@@ -1,17 +1,17 @@
-membership = input("Are you a member? (yes or no): ").lower();
-total_amount = float(input("Enter amount: "));
-discount_amount = 0;
+membership_status = input("Are you a member? yes/no: ").lower();
+cart_amount = float(input("Enter amount: "));
 
-if membership == "yes":
-    if total_amount >= 20000:
-        discount_amount = 0.03;
-    elif total_amount >= 10000:
-        discount_amount = 0.02;
-    else:
-        discount_amount = 0.01;
+if membership_status == "yes" and cart_amount >= 20000: 
+	discount_amount = (cart_amount * 3) / 100;
+	final_amount = cart_amount - discount_amount;
+	print("Final bill", final_amount);
+elif membership_status == "yes" and cart_amount >= 10000: 
+	discount_amount = (cart_amount * 2) / 100;
+	final_amount = cart_amount - discount_amount;
+	print("Final bill", final_amount);
+elif membership_status == "yes" and cart_amount <= 10000: 
+	discount_amount = (cart_amount * 1) / 100;
+	final_amount = cart_amount - discount_amount;
+	print("Final bill", final_amount);
 else:
-    discount_amount = 0;
-
-final_bill = total_amount - (total_amount * discount_amount);
-
-print("Final bill:", final_bill);
+	print("Final bill", cart_amount);
