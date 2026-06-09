@@ -1,12 +1,22 @@
-username = input("Enter username: ");
-password = input("Enter password: ");
-otp = input("Enter OTP: ");
+skill = input("Enter skill leve (beginner / intermediate / advanced): ");
+age = int(input("Enter age: "));
 
-if username == "admin" and password == "12345" and otp == "9999":
-	print("Login Approved");
-elif username != "admin":
-	print("Invalid Username");
-elif password != "12345":
-	print("Wrong Password");
-else: 
-	print("Invalid OTP");
+if skill == "beginner":
+	if age >= 18:
+		print("Enrollment Approved");
+	else:
+		print("Enrollment Denied");
+
+elif skill == "intermediate":
+	if age >= 16:
+		print("Enrollment Approved");
+	else:
+		print("Enrollment Denied");
+
+elif skill == "advanced":
+	if age >= 14:
+		print("Enrollment Approved");
+	else:
+		print("Enrollment Denied");
+else:
+	print("Invalid Input");
