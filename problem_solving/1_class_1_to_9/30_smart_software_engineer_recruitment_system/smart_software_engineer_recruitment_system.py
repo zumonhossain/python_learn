@@ -3,12 +3,7 @@ problem_solving = int(input("Enter problem solving score: "));
 communication = input("Enter communication skill (good/bad): ").lower();
 experience = int(input("Enter years of experience: "));
 
-if (
-    python_score >= 80 and
-    problem_solving >= 75 and
-    communication == "good" and
-    experience >= 2
-):
-    print("Selected for Final HR Round")
+if python_score >= 80 and problem_solving >= 75 and communication == "good" and experience >= 2:
+	print("Selected for Final HR Round");
 else:
-    print("Not Selected")
+	print("Not Selected");

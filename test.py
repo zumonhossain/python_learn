@@ -1,22 +1,9 @@
-skill = input("Enter skill leve (beginner / intermediate / advanced): ");
-age = int(input("Enter age: "));
+python_score = int(input("Enter Python skill score: "));
+problem_solving = int(input("Enter problem solving score: "));
+communication = input("Enter communication skill (good/bad): ").lower();
+experience = int(input("Enter years of experience: "));
 
-if skill == "beginner":
-	if age >= 18:
-		print("Enrollment Approved");
-	else:
-		print("Enrollment Denied");
-
-elif skill == "intermediate":
-	if age >= 16:
-		print("Enrollment Approved");
-	else:
-		print("Enrollment Denied");
-
-elif skill == "advanced":
-	if age >= 14:
-		print("Enrollment Approved");
-	else:
-		print("Enrollment Denied");
+if python_score >= 80 and problem_solving >= 75 and communication == "good" and experience >= 2:
+	print("Selected for Final HR Round");
 else:
-	print("Invalid Input");
+	print("Not Selected");
