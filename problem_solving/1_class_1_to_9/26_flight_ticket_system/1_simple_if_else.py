@@ -1,7 +1,7 @@
-nationality = input("Enter nationality: ");
-passport = input("Is passport valid? (yes/no): ").lower();
+nationality = input("Enter nationality: ")
+passport = input("Is passport valid? ")
 
-if passport == "yes":
-    print("Ticket Booking Allowed");
+if nationality == "Bangladesh" and passport == "yes":
+    print("Ticket Booking Allowed")
 else:
-    print("Ticket Booking Denied");
+    print("Ticket Booking Denied")
