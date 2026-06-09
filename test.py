@@ -1,17 +1,12 @@
-membership_status = input("Are you a member? yes/no: ").lower();
-cart_amount = float(input("Enter amount: "));
+username = input("Enter username: ");
+password = input("Enter password: ");
+otp = input("Enter OTP: ");
 
-if membership_status == "yes" and cart_amount >= 20000: 
-	discount_amount = (cart_amount * 3) / 100;
-	final_amount = cart_amount - discount_amount;
-	print("Final bill", final_amount);
-elif membership_status == "yes" and cart_amount >= 10000: 
-	discount_amount = (cart_amount * 2) / 100;
-	final_amount = cart_amount - discount_amount;
-	print("Final bill", final_amount);
-elif membership_status == "yes" and cart_amount <= 10000: 
-	discount_amount = (cart_amount * 1) / 100;
-	final_amount = cart_amount - discount_amount;
-	print("Final bill", final_amount);
-else:
-	print("Final bill", cart_amount);
+if username == "admin" and password == "12345" and otp == "9999":
+	print("Login Approved");
+elif username != "admin":
+	print("Invalid Username");
+elif password != "12345":
+	print("Wrong Password");
+else: 
+	print("Invalid OTP");
