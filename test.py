@@ -1,11 +1,6 @@
-marks = int(input("Enter your marks:"));
-if marks >= 90:
-	print("A+");
-elif marks >= 80:
-	print("A");
-elif marks >= 70:
-	print("B");
-elif marks >= 60:
-	print("C");
+password = input("Enter password: ");
+
+if not password.isalpha() and not password.isdigit() and len(password) >= 8:
+	print("Strong Password");
 else:
-	print("Fall");
+	print("Weak Password");

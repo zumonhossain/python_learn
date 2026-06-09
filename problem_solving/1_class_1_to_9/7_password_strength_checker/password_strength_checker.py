@@ -1,5 +1,6 @@
 password = input("Enter password: ");
-if len(password) >= 8 and any(char.isdigit() for char in password):
-    print("Strong Password");
+
+if not password.isalpha() and not password.isdigit() and len(password) >= 8:
+	print("Strong Password");
 else:
-    print("Weak Password");
+	print("Weak Password");
