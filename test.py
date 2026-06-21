@@ -1,15 +1,5 @@
-num = 29
-is_prime = True
-
-if num < 2:
-    is_prime = False
-else:
-    for i in range(2, num):
-        if num % i == 0:
-            is_prime = False
-            break
-
-if is_prime:
-    print(num, "is prime")
-else:
-    print(num, "is not prime")
+numbers = [1, 2, 3, 4, 5]
+doubled = []
+for n in numbers:
+    doubled.append(n * 2)
+print(doubled)
