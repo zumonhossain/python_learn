@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Data Structures — Beginner's Guide</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f7f4;--sur:#fff;--sur2:#f2f1ed;--sur3:#e8e7e2;
+  --bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.14);
+  --tx:#1a1a18;--mu:#6b6960;--hi:#a09e96;
+  --L:#2563eb;--Lbg:#eff6ff;--Lbr:#bfdbfe;
+  --T:#7c3aed;--Tbg:#f5f3ff;--Tbr:#ddd6fe;
+  --S:#059669;--Sbg:#ecfdf5;--Sbr:#a7f3d0;
+  --D:#d97706;--Dbg:#fffbeb;--Dbr:#fde68a;
+  --red:#dc2626;--rbg:#fef2f2;
+  --grn:#16a34a;--gbg:#f0fdf4;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --rad:12px;--shd:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);line-height:1.65;font-size:15px}
+
+/* HEADER */
+.hero{background:var(--sur);border-bottom:1px solid var(--bd);padding:3rem 1.5rem 2.5rem;text-align:center}
+.hero-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);background:var(--sur2);border:1px solid var(--bd2);padding:4px 12px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.hero h1 span{background:linear-gradient(135deg,var(--L),var(--T));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--mu);font-size:15px;max-width:500px;margin:10px auto 0}
+.src{margin-top:14px;font-size:12px;color:var(--hi)}
+.src a{color:var(--L);text-decoration:none}
+
+/* NAV */
+.snav{position:sticky;top:0;z-index:100;background:var(--sur);border-bottom:1px solid var(--bd);display:flex;overflow-x:auto;scrollbar-width:none}
+.snav::-webkit-scrollbar{display:none}
+.nb{flex-shrink:0;padding:14px 15px;font-size:13px;font-weight:600;color:var(--mu);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nb:hover{color:var(--tx)}
+.nb.on{border-bottom-color:var(--L);color:var(--L)}
+.nb.tT.on{border-bottom-color:var(--T);color:var(--T)}
+.nb.tS.on{border-bottom-color:var(--S);color:var(--S)}
+.nb.tD.on{border-bottom-color:var(--D);color:var(--D)}
+.nb.tC.on{border-bottom-color:var(--tx);color:var(--tx)}
+.nb.tQ.on{border-bottom-color:#db2777;color:#db2777}
+
+/* PAGES */
+.pg{display:none;max-width:800px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.pg.on{display:block}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
+.sh-ico{font-size:2.4rem;line-height:1;flex-shrink:0}
+.sh h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.sh p{font-size:14px;color:var(--mu)}
+
+/* CARDS */
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:20px 22px;margin-bottom:18px;box-shadow:var(--shd)}
+.cnum{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.cnum::after{content:'';flex:1;height:1px;background:var(--bd)}
+.card h3{font-size:15.5px;font-weight:700;margin-bottom:10px}
+.card>p,.card>ul{font-size:14px;color:var(--mu);line-height:1.75;margin-bottom:10px}
+.card>ul{padding-left:18px}
+.card>ul li{margin-bottom:4px}
+.card>ul li strong{color:var(--tx)}
+
+/* ANALOGY */
+.ana{display:flex;gap:12px;background:var(--sur2);border-radius:10px;padding:14px 16px;margin:12px 0}
+.ana-i{font-size:1.6rem;flex-shrink:0;line-height:1}
+.ana h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.ana p{font-size:13px;color:var(--mu);line-height:1.6}
+
+/* CODE */
+.clbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--hi);margin-bottom:5px;padding-left:2px}
+pre{font-family:var(--mono);font-size:13px;line-height:1.85;background:#1e1e2e;color:#cdd6f4;border-radius:10px;padding:16px 18px;overflow-x:auto;white-space:pre;margin:10px 0}
+code{font-family:var(--mono);font-size:12.5px}
+p code,li code{background:var(--sur2);padding:1px 6px;border-radius:4px;font-size:12.5px;color:var(--tx);border:1px solid var(--bd)}
+.kw{color:#cba6f7}.fn{color:#89b4fa}.st{color:#a6e3a1}.cm{color:#585b70;font-style:italic}.nm{color:#fab387}
+
+/* OUTPUT */
+.out{background:#f8f8f6;border:1px solid var(--bd2);border-radius:8px;padding:9px 14px;font-family:var(--mono);font-size:12.5px;color:var(--mu);margin-top:-4px;margin-bottom:10px}
+.out::before{content:'▶  ';color:var(--hi);font-size:11px;font-weight:700}
+
+/* CALLOUT */
+.co{border-radius:10px;padding:11px 16px;margin:12px 0;font-size:13.5px;line-height:1.65;display:flex;gap:10px;align-items:flex-start}
+.co-i{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.co.tip{background:var(--Lbg);border:1px solid var(--Lbr);color:#1e40af}
+.co.warn{background:var(--Dbg);border:1px solid var(--Dbr);color:#92400e}
+.co.ok{background:var(--gbg);border:1px solid #bbf7d0;color:#14532d}
+.co.danger{background:var(--rbg);border:1px solid #fecaca;color:#991b1b}
+
+/* REAL LIFE */
+.rl{border-left:3px solid;border-radius:0 10px 10px 0;padding:11px 15px;margin:10px 0}
+.rl-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.rl p{font-size:13px;line-height:1.6}
+.rl.L{border-color:var(--L);background:var(--Lbg)}.rl.L .rl-lbl{color:var(--L)}.rl.L p{color:#1e3a8a}
+.rl.T{border-color:var(--T);background:var(--Tbg)}.rl.T .rl-lbl{color:var(--T)}.rl.T p{color:#4c1d95}
+.rl.S{border-color:var(--S);background:var(--Sbg)}.rl.S .rl-lbl{color:var(--S)}.rl.S p{color:#064e3b}
+.rl.D{border-color:var(--D);background:var(--Dbg)}.rl.D .rl-lbl{color:var(--D)}.rl.D p{color:#78350f}
+
+/* PROPS */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0}
+.prop{background:var(--sur2);border-radius:8px;padding:9px 11px;text-align:center}
+.pl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hi);margin-bottom:5px}
+.pv{font-size:12.5px;font-weight:700}
+.py{color:var(--grn)}.pn{color:var(--red)}.pna{color:var(--hi)}
+
+/* METHODS TABLE */
+.mtbl{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.mtbl th{text-align:left;padding:7px 12px;background:var(--sur2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);border-bottom:1px solid var(--bd)}
+.mtbl td{padding:8px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
+.mtbl td:first-child{font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;color:var(--L)}
+.mtbl td:nth-child(2){color:var(--mu)}
+.mtbl tr:last-child td{border-bottom:none}
+.mtbl tr:hover td{background:var(--sur2)}
+
+/* COMPARE TABLE */
+.tw{overflow-x:auto;border-radius:var(--rad);border:1px solid var(--bd);margin:12px 0}
+.ct{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
+.ct th{background:var(--sur2);padding:9px 13px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);text-align:left}
+.ct td{padding:8px 13px;border-top:1px solid var(--bd);vertical-align:middle}
+.ct tr:hover td{background:var(--sur2)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.tL{background:var(--Lbg);color:var(--L)}.tT2{background:var(--Tbg);color:var(--T)}
+.tS2{background:var(--Sbg);color:var(--S)}.tD2{background:var(--Dbg);color:var(--D)}
+.yes{color:var(--grn)}.no{color:var(--red)}.na2{color:var(--hi)}
+
+/* DEMO */
+.demo{background:var(--sur2);border:1px solid var(--bd2);border-radius:var(--rad);padding:16px 18px;margin:12px 0}
+.dtitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-bottom:12px}
+.brow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.btn{padding:6px 13px;border-radius:7px;font-size:12.5px;font-weight:600;border:1px solid;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.bL{background:var(--Lbg);color:var(--L);border-color:var(--Lbr)}.bL:hover{background:var(--L);color:#fff}
+.bT{background:var(--Tbg);color:var(--T);border-color:var(--Tbr)}.bT:hover{background:var(--T);color:#fff}
+.bS{background:var(--Sbg);color:var(--S);border-color:var(--Sbr)}.bS:hover{background:var(--S);color:#fff}
+.bD{background:var(--Dbg);color:var(--D);border-color:var(--Dbr)}.bD:hover{background:var(--D);color:#fff}
+.bG{background:var(--sur3);color:var(--mu);border-color:var(--bd2)}.bG:hover{color:var(--tx)}
+.dout{background:#1e1e2e;border-radius:8px;padding:13px 15px;font-family:var(--mono);font-size:12.5px;line-height:1.85;min-height:52px;color:#cdd6f4}
+.dlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#585b70;margin-bottom:4px;font-family:var(--sans)}
+.lo{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-5px)}to{opacity:1;transform:translateX(0)}}
+.cG{color:#a6e3a1}.cB{color:#89b4fa}.cA{color:#fab387}.cP{color:#cba6f7}.cR{color:#f38ba8}.cMu{color:#585b70}.cT{color:#89dceb}
+
+/* VISUAL BOXES */
+.vrow{display:flex;flex-wrap:wrap;gap:6px;min-height:38px;align-items:center;margin:8px 0}
+.vb{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-family:var(--mono);font-size:12.5px;font-weight:600;border:1px solid;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.vbL{background:var(--Lbg);border-color:var(--Lbr);color:var(--L)}
+.vbT{background:var(--Tbg);border-color:var(--Tbr);color:var(--T)}
+.vbS{background:var(--Sbg);border-color:var(--Sbr);color:var(--S)}
+.vbD{background:var(--Dbg);border-color:var(--Dbr);color:var(--D)}
+.vbR{background:var(--rbg);border-color:#fecaca;color:var(--red)}
+.idx{font-size:9px;background:rgba(0,0,0,.08);padding:1px 4px;border-radius:3px;opacity:.7}
+
+/* OVERVIEW */
+.ogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+.oc{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;box-shadow:var(--shd)}
+.oc:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.ocL:hover{border-color:var(--L)}.ocT:hover{border-color:var(--T)}
+.ocS:hover{border-color:var(--S)}.ocD:hover{border-color:var(--D)}
+.oi{font-size:2rem;margin-bottom:8px}
+.on2{font-size:14px;font-weight:800;margin-bottom:4px}
+.os{font-family:var(--mono);font-size:11.5px;color:var(--hi);margin-bottom:7px}
+.od{font-size:12px;color:var(--mu);line-height:1.5}
+
+/* QUIZ */
+.qcard{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shd)}
+.qn{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--hi);margin-bottom:8px}
+.qt{font-size:15px;font-weight:700;margin-bottom:13px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qo{padding:9px 15px;border-radius:8px;font-size:13.5px;cursor:pointer;transition:all .15s;background:var(--sur2);color:var(--tx);border:1px solid var(--bd);text-align:left;font-family:var(--sans);font-weight:500;line-height:1.4}
+.qo:hover:not(:disabled){border-color:var(--L);background:var(--Lbg);color:var(--L)}
+.qo.ok{border-color:var(--S)!important;background:var(--Sbg)!important;color:#064e3b!important;font-weight:700}
+.qo.wr{border-color:var(--red)!important;background:var(--rbg)!important;color:#7f1d1d!important}
+.qfb{margin-top:10px;font-size:13px;padding:10px 14px;border-radius:8px;display:none;line-height:1.65}
+.qfb.on{display:block}
+.qfb.good{background:var(--gbg);color:#14532d;border:1px solid #bbf7d0}
+.qfb.bad{background:var(--rbg);color:#7f1d1d;border:1px solid #fecaca}
+.pbar{height:4px;background:var(--bd);border-radius:2px;margin-bottom:20px;overflow:hidden}
+.pfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--L),var(--T));transition:width .4s}
+.scard{text-align:center;background:var(--sur);border:1px solid var(--bd2);border-radius:var(--rad);padding:36px 20px;display:none;margin-top:20px;box-shadow:var(--shd)}
+.scard.on{display:block}
+.sbig{font-size:4.5rem;font-weight:900;background:linear-gradient(135deg,var(--L),var(--T));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.ssub{font-size:14px;color:var(--mu);margin-top:8px}
+.smsg{font-size:1rem;font-weight:700;margin-top:12px}
+.rbtn{margin-top:18px;padding:10px 26px;border-radius:8px;background:var(--L);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer}
+
+/* PAGE NAV */
+.pnav{display:flex;justify-content:space-between;margin-top:30px;gap:10px}
+.pnb{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--bd2);background:var(--sur);color:var(--mu);transition:all .2s;font-family:var(--sans)}
+.pnb:hover{color:var(--tx)}
+.pnnext{background:var(--L);color:#fff;border-color:var(--L)}.pnnext:hover{opacity:.9}
+
+/* DECISION BOXES */
+.dbox{border-left:3px solid;border-radius:0 10px 10px 0;padding:13px 16px;margin-top:8px;display:flex;gap:12px;align-items:flex-start}
+.dbox h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.dbox p{font-size:13px;line-height:1.6}
+.dbox.L{border-color:var(--L);background:var(--Lbg)}.dbox.L h4{color:var(--L)}.dbox.L p{color:#1e3a8a}
+.dbox.T{border-color:var(--T);background:var(--Tbg)}.dbox.T h4{color:var(--T)}.dbox.T p{color:#4c1d95}
+.dbox.S{border-color:var(--S);background:var(--Sbg)}.dbox.S h4{color:var(--S)}.dbox.S p{color:#064e3b}
+.dbox.D{border-color:var(--D);background:var(--Dbg)}.dbox.D h4{color:var(--D)}.dbox.D p{color:#78350f}
+
+@media(max-width:600px){
+  .hero{padding:2rem 1rem 1.75rem}.pg{padding:1.5rem 1rem 4rem}
+  .sh{flex-direction:column;gap:8px}.card{padding:15px 15px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🐍 Python for Beginners</div>
+  <h1>Python <span>Data Structures</span> Made Simple</h1>
+  <p>Every essential concept from W3Schools — explained plainly with real-life examples and live demos.</p>
+  <p class="src">Concepts sourced from <a href="https://www.w3schools.com/python/" target="_blank">W3Schools Python Tutorial</a> · Written in our own words</p>
+</div>
+
+<nav class="snav">
+  <button class="nb on"   onclick="go('home')">🏠 Start Here</button>
+  <button class="nb"      onclick="go('list')">📋 List</button>
+  <button class="nb tT"   onclick="go('tuple')">📦 Tuple</button>
+  <button class="nb tS"   onclick="go('set')">🔵 Set</button>
+  <button class="nb tD"   onclick="go('dict')">📚 Dictionary</button>
+  <button class="nb tC"   onclick="go('cmp')">⚖️ Compare</button>
+  <button class="nb tQ"   onclick="go('quiz')">🧠 Quiz</button>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home" class="pg on">
+  <div class="sh"><div class="sh-ico">🏠</div><div><h2>What Are Data Structures?</h2><p>Different containers for storing data — each with its own rules and superpowers.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Why does it matter?</div>
+    <h3>Imagine organising your room 🏠</h3>
+    <p>You wouldn't pile everything in one heap. You'd use a <strong>numbered shelf</strong> for books (ordered), a <strong>sealed box</strong> for valuables (can't change), a <strong>jar where every item is unique</strong> (no duplicates), or a <strong>labelled drawer</strong> where each slot has a name (key-value).</p>
+    <p>Python's four main data structures work exactly the same way. Picking the right one makes your code faster, cleaner, and harder to break.</p>
+  </div>
+
+  <div class="ogrid">
+    <div class="oc ocL" onclick="go('list')"><div class="oi">📋</div><div class="on2" style="color:var(--L)">List</div><div class="os">[ ]</div><div class="od">Ordered, changeable, allows duplicates. Like a shopping list.</div></div>
+    <div class="oc ocT" onclick="go('tuple')"><div class="oi">📦</div><div class="on2" style="color:var(--T)">Tuple</div><div class="os">( )</div><div class="od">Ordered, unchangeable, allows duplicates. Like a sealed package.</div></div>
+    <div class="oc ocS" onclick="go('set')"><div class="oi">🔵</div><div class="on2" style="color:var(--S)">Set</div><div class="os">set( )</div><div class="od">Unordered, unique items only. Like a ballot box.</div></div>
+    <div class="oc ocD" onclick="go('dict')"><div class="oi">📚</div><div class="on2" style="color:var(--D)">Dictionary</div><div class="os">{key: val}</div><div class="od">Key-value pairs. Like a real dictionary.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Quick cheat sheet</div>
+    <h3>Which one should I pick?</h3>
+    <div class="tw"><table class="ct">
+      <thead><tr><th>Question to ask yourself</th><th>Best choice</th></tr></thead>
+      <tbody>
+        <tr><td>Do I need items in order AND want to change them?</td><td><span class="tag tL">List</span></td></tr>
+        <tr><td>Is my data fixed and should never change?</td><td><span class="tag tT2">Tuple</span></td></tr>
+        <tr><td>Do I need unique items or fast "is this here?" checks?</td><td><span class="tag tS2">Set</span></td></tr>
+        <tr><td>Does each value need a meaningful name/label?</td><td><span class="tag tD2">Dictionary</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="pnav"><span></span><button class="pnb pnnext" onclick="go('list')">Start with List →</button></div>
+</div>
+
+<!-- ══════════ LIST ══════════ -->
+<div id="list" class="pg">
+  <div class="sh"><div class="sh-ico">📋</div><div><h2 style="color:var(--L)">Python Lists</h2><p>Ordered, changeable, allows duplicates — the most used structure in Python.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 1 · What is a List?</div>
+    <h3>A list stores multiple items in one variable, in order</h3>
+    <p>Think of a list like a <strong>numbered shopping list</strong>. Each item has a position (called an <strong>index</strong>) starting at 0. You can freely add, remove, and change items.</p>
+    <div class="ana"><div class="ana-i">🛒</div><div><h4>Real life: Shopping cart</h4><p>Your online cart is a list — items appear in order, you can add "Milk" twice, and remove "Bread" anytime. That's exactly a Python list.</p></div></div>
+<pre><span class="cm"># Square brackets [ ] create a list</span>
+cart = [<span class="st">"milk"</span>, <span class="st">"bread"</span>, <span class="st">"eggs"</span>, <span class="st">"milk"</span>]  <span class="cm"># duplicates OK!</span>
+<span class="fn">print</span>(cart)
+<span class="fn">print</span>(<span class="fn">len</span>(cart))  <span class="cm"># 4</span></pre>
+    <div class="out">['milk', 'bread', 'eggs', 'milk']  →  4</div>
+    <div class="pgrid">
+      <div class="prop"><div class="pl">Ordered</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Changeable</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Duplicates</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Syntax</div><div class="pv">[ ]</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 2 · Accessing Items</div>
+    <h3>Get any item using its index number (starts at 0!)</h3>
+    <p>Every item has a position starting from <code>0</code>. Use negative numbers to count from the end — <code>-1</code> is always the last item.</p>
+    <div class="ana"><div class="ana-i">🎬</div><div><h4>Real life: Cinema seats</h4><p>Seat 0 is the first, seat 1 is second. <code>seats[-1]</code> is the last seat without needing to count how many there are!</p></div></div>
+<pre>fruits = [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>, <span class="st">"mango"</span>]
+<span class="fn">print</span>(fruits[<span class="nm">0</span>])    <span class="cm"># "apple"  ← first</span>
+<span class="fn">print</span>(fruits[-<span class="nm">1</span>])   <span class="cm"># "mango"  ← last</span>
+<span class="fn">print</span>(fruits[<span class="nm">1</span>:<span class="nm">3</span>])  <span class="cm"># ["banana","cherry"] ← slice</span></pre>
+    <div class="co tip"><div class="co-i">💡</div><div>Counting always starts at <strong>0</strong>. The 1st item is <code>[0]</code>, the 2nd is <code>[1]</code>. This trips up almost every beginner!</div></div>
+    <div class="rl L"><div class="rl-lbl">🎵 Playlist</div><p><code>playlist[0]</code> is the song playing now. <code>playlist[-1]</code> is the last song. Skip to track 3 with <code>playlist[2]</code>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 3 · Changing Items</div>
+    <h3>Update any item by assigning a new value to its index</h3>
+<pre>fruits = [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]
+fruits[<span class="nm">1</span>] = <span class="st">"orange"</span>  <span class="cm"># replace banana</span>
+<span class="fn">print</span>(fruits)  <span class="cm"># ["apple", "orange", "cherry"]</span></pre>
+    <div class="rl L"><div class="rl-lbl">📝 To-do app</div><p>Realise task 2 was wrong? <code>tasks[1] = "Buy birthday cake"</code>. The list updates instantly.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 4 · Adding Items</div>
+    <h3>Three ways to add items to a list</h3>
+<pre>fruits = [<span class="st">"apple"</span>, <span class="st">"banana"</span>]
+
+fruits.append(<span class="st">"cherry"</span>)    <span class="cm"># add to END — most common</span>
+<span class="fn">print</span>(fruits)  <span class="cm"># ["apple","banana","cherry"]</span>
+
+fruits.insert(<span class="nm">1</span>, <span class="st">"mango"</span>)   <span class="cm"># add at position 1</span>
+<span class="fn">print</span>(fruits)  <span class="cm"># ["apple","mango","banana","cherry"]</span>
+
+more = [<span class="st">"grape"</span>, <span class="st">"kiwi"</span>]
+fruits.extend(more)           <span class="cm"># add ALL items from another list</span></pre>
+    <div class="rl L"><div class="rl-lbl">🛍️ Online order</div><p>Keep adding to cart: <code>cart.append("headphones")</code>. Merge two wishlists: <code>cart.extend(wishlist)</code>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 5 · Removing Items</div>
+    <h3>Several ways to delete items</h3>
+<pre>fruits = [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>, <span class="st">"banana"</span>]
+
+fruits.remove(<span class="st">"banana"</span>)  <span class="cm"># removes FIRST match</span>
+fruits.pop(<span class="nm">0</span>)             <span class="cm"># removes by index, returns it</span>
+<span class="kw">del</span> fruits[<span class="nm">0</span>]             <span class="cm"># delete by index</span>
+fruits.clear()            <span class="cm"># wipe everything → []</span></pre>
+    <div class="rl L"><div class="rl-lbl">🎵 Playlist</div><p>Remove a song: <code>playlist.remove("Song")</code>. Skip current song: <code>playlist.pop(0)</code>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 6 · Looping Through a List</div>
+    <h3>Use a for loop to process every item</h3>
+<pre>students = [<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Carol"</span>]
+
+<span class="kw">for</span> student <span class="kw">in</span> students:
+    <span class="fn">print</span>(<span class="st">f"Hello, {student}!"</span>)
+
+<span class="cm"># With index number</span>
+<span class="kw">for</span> i, student <span class="kw">in</span> <span class="fn">enumerate</span>(students):
+    <span class="fn">print</span>(<span class="st">f"{i+1}. {student}"</span>)  <span class="cm"># 1. Alice  2. Bob  3. Carol</span></pre>
+    <div class="rl L"><div class="rl-lbl">📧 Send emails</div><p>Loop through subscribers and send each one an email: <code>for email in subscribers: send(email)</code>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 7 · List Comprehension</div>
+    <h3>Build a new list in one clean line — the Pythonic way</h3>
+    <p>Instead of a loop + append, write it all in a single line inside square brackets. Beginners find this mind-blowing once it clicks!</p>
+<pre><span class="cm"># Old way (3 lines)</span>
+squares = []
+<span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">6</span>):
+    squares.append(x**<span class="nm">2</span>)
+
+<span class="cm"># List comprehension (1 line!)</span>
+squares = [x**<span class="nm">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">6</span>)]
+<span class="fn">print</span>(squares)  <span class="cm"># [1, 4, 9, 16, 25]</span>
+
+<span class="cm"># With a filter — only even numbers</span>
+evens = [x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">11</span>) <span class="kw">if</span> x % <span class="nm">2</span> == <span class="nm">0</span>]
+<span class="fn">print</span>(evens)    <span class="cm"># [2, 4, 6, 8, 10]</span>
+
+<span class="cm"># Transform — uppercase all names</span>
+names = [<span class="st">"alice"</span>, <span class="st">"bob"</span>]
+upper = [n.upper() <span class="kw">for</span> n <span class="kw">in</span> names]  <span class="cm"># ["ALICE","BOB"]</span></pre>
+    <div class="rl L"><div class="rl-lbl">🏪 Filter products</div><p>Get items under ₹500 from a price list: <code>cheap = [p for p in prices if p &lt; 500]</code>. One line instead of six!</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Concept 8 · Sorting a List</div>
+    <h3>Arrange items in alphabetical or numerical order</h3>
+<pre>nums   = [<span class="nm">3</span>, <span class="nm">1</span>, <span class="nm">4</span>, <span class="nm">1</span>, <span class="nm">5</span>, <span class="nm">9</span>]
+fruits = [<span class="st">"banana"</span>, <span class="st">"apple"</span>, <span class="st">"cherry"</span>]
+
+nums.sort()               <span class="cm"># sorts IN PLACE → [1,1,3,4,5,9]</span>
+nums.sort(reverse=<span class="kw">True</span>)  <span class="cm"># descending → [9,5,4,3,1,1]</span>
+
+<span class="cm"># sorted() keeps original unchanged, returns new list</span>
+result = <span class="fn">sorted</span>(fruits)
+<span class="fn">print</span>(result)   <span class="cm"># ["apple","banana","cherry"]</span>
+<span class="fn">print</span>(fruits)   <span class="cm"># ["banana","apple","cherry"] ← unchanged!</span></pre>
+    <div class="rl L"><div class="rl-lbl">🏆 Leaderboard</div><p>Sort scores highest first: <code>scores.sort(reverse=True)</code>. The winner is <code>scores[0]</code>.</p></div>
+  </div>
+
+  <!-- LIST DEMO -->
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">🎮 Try it — Live Playlist Manager</div>
+    <h3>Click buttons to see list operations happen</h3>
+    <div class="demo">
+      <div class="dtitle">Current playlist:</div>
+      <div class="vrow" id="lvis"></div>
+      <div class="brow" style="margin-top:10px">
+        <button class="btn bL" onclick="lD('add')">+ Add Song</button>
+        <button class="btn bL" onclick="lD('rem')">− Remove Last</button>
+        <button class="btn bL" onclick="lD('srt')">Sort A→Z</button>
+        <button class="btn bL" onclick="lD('cmp')">List Comprehension</button>
+        <button class="btn bG" onclick="lD('rst')">↺ Reset</button>
+      </div>
+      <div class="dout"><div class="dlbl">Output</div><div id="lout"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--L)">Reference · All List Methods</div>
+    <table class="mtbl">
+      <thead><tr><th>Method</th><th>What it does</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>.append(x)</td><td>Add x to the end</td><td><code>cart.append("phone")</code></td></tr>
+        <tr><td>.insert(i,x)</td><td>Add x at position i</td><td><code>cart.insert(0,"urgent")</code></td></tr>
+        <tr><td>.extend(lst)</td><td>Add all items from another list</td><td><code>cart.extend(wishlist)</code></td></tr>
+        <tr><td>.remove(x)</td><td>Remove first match of x</td><td><code>cart.remove("phone")</code></td></tr>
+        <tr><td>.pop(i)</td><td>Remove &amp; return item at i (default: last)</td><td><code>cart.pop()</code></td></tr>
+        <tr><td>.sort()</td><td>Sort in place (A–Z or 0–9)</td><td><code>scores.sort()</code></td></tr>
+        <tr><td>.reverse()</td><td>Flip order in place</td><td><code>scores.reverse()</code></td></tr>
+        <tr><td>.index(x)</td><td>Find position of first x</td><td><code>fruits.index("apple")</code></td></tr>
+        <tr><td>.count(x)</td><td>Count how many times x appears</td><td><code>nums.count(3)</code></td></tr>
+        <tr><td>.clear()</td><td>Remove all items</td><td><code>cart.clear()</code></td></tr>
+        <tr><td>.copy()</td><td>Return a copy of the list</td><td><code>backup = cart.copy()</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pnav"><button class="pnb" onclick="go('home')">← Home</button><button class="pnb pnnext" onclick="go('tuple')">Next: Tuple →</button></div>
+</div>
+
+<!-- ══════════ TUPLE ══════════ -->
+<div id="tuple" class="pg">
+  <div class="sh"><div class="sh-ico">📦</div><div><h2 style="color:var(--T)">Python Tuples</h2><p>Ordered and unchangeable. Once sealed, it stays sealed forever.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--T)">Concept 1 · What is a Tuple?</div>
+    <h3>A tuple is like a list that can never be changed</h3>
+    <p>Once created, items are locked in — you can't add, remove, or change them. This is called being <strong>immutable</strong>. It sounds limiting, but it's actually a <em>feature</em> that protects important data.</p>
+    <div class="ana"><div class="ana-i">🎂</div><div><h4>Real life: Birth certificate</h4><p>Your name, birthday, and birthplace never change. A tuple is perfect for data like this — GPS coordinates, an RGB colour, a date — things that are facts, not variables.</p></div></div>
+<pre><span class="cm"># Round brackets ( ) create a tuple</span>
+location = (<span class="nm">35.6762</span>, <span class="nm">139.6503</span>)  <span class="cm"># Tokyo coordinates</span>
+colour   = (<span class="nm">255</span>, <span class="nm">165</span>, <span class="nm">0</span>)        <span class="cm"># Orange in RGB</span>
+<span class="fn">print</span>(<span class="fn">type</span>(location))  <span class="cm"># &lt;class 'tuple'&gt;</span></pre>
+    <div class="co warn"><div class="co-i">⚠️</div><div><strong>Single-item tuple needs a trailing comma!</strong> <code>(42,)</code> is a tuple. <code>(42)</code> is just the number 42. The comma is what makes it a tuple.</div></div>
+    <div class="pgrid">
+      <div class="prop"><div class="pl">Ordered</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Changeable</div><div class="pv pn">❌ No</div></div>
+      <div class="prop"><div class="pl">Duplicates</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Syntax</div><div class="pv">( )</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--T)">Concept 2 · Accessing Items</div>
+    <h3>Access by index — exactly like a list</h3>
+<pre>colour = (<span class="nm">255</span>, <span class="nm">165</span>, <span class="nm">0</span>)  <span class="cm"># Red, Green, Blue</span>
+<span class="fn">print</span>(colour[<span class="nm">0</span>])    <span class="cm"># 255 — Red</span>
+<span class="fn">print</span>(colour[-<span class="nm">1</span>])   <span class="cm"># 0   — Blue (last)</span>
+<span class="fn">print</span>(colour[<span class="nm">0</span>:<span class="nm">2</span>])  <span class="cm"># (255, 165) — slicing works too</span>
+
+<span class="kw">if</span> <span class="nm">255</span> <span class="kw">in</span> colour:
+    <span class="fn">print</span>(<span class="st">"Max red!"</span>)</pre>
+    <div class="rl T"><div class="rl-lbl">🗺️ Map coordinates</div><p>Get latitude with <code>tokyo[0]</code> and longitude with <code>tokyo[1]</code>. These are facts — a tuple protects them from accidental changes.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--T)">Concept 3 · Unpacking a Tuple</div>
+    <h3>Assign each value to its own variable in one line</h3>
+    <p>One of Python's most loved features. Instead of <code>[0]</code>, <code>[1]</code>, <code>[2]</code> — name each value directly:</p>
+<pre>colour = (<span class="nm">255</span>, <span class="nm">165</span>, <span class="nm">0</span>)
+red, green, blue = colour       <span class="cm"># unpack!</span>
+<span class="fn">print</span>(red, green, blue)        <span class="cm"># 255  165  0</span>
+
+<span class="cm"># Swap two variables using tuple magic</span>
+a, b = <span class="nm">10</span>, <span class="nm">20</span>
+a, b = b, a                    <span class="cm"># a=20, b=10 — no temp variable needed!</span>
+
+<span class="cm"># Functions return multiple values as a tuple</span>
+<span class="kw">def</span> <span class="fn">get_size</span>():
+    <span class="kw">return</span> <span class="nm">1920</span>, <span class="nm">1080</span>          <span class="cm"># returns a tuple</span>
+width, height = <span class="fn">get_size</span>()
+<span class="fn">print</span>(<span class="st">f"{width}x{height}"</span>)    <span class="cm"># 1920x1080</span></pre>
+    <div class="rl T"><div class="rl-lbl">🎨 Design app</div><p>A colour picker returns <code>(255, 165, 0)</code>. Unpack it: <code>r, g, b = colour_picker()</code> and apply each channel to your CSS.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--T)">Concept 4 · Why Use a Tuple Over a List?</div>
+    <h3>Three solid reasons to choose a tuple</h3>
+    <ul>
+      <li><strong>Safety:</strong> Prevents accidental changes to important data (coordinates, settings, credentials)</li>
+      <li><strong>Speed:</strong> Tuples are faster than lists — Python optimises them because it knows they never change</li>
+      <li><strong>Dict keys:</strong> Tuples can be used as dictionary keys — lists cannot</li>
+    </ul>
+<pre><span class="cm"># Trying to change a tuple — it will ERROR on purpose!</span>
+coords = (<span class="nm">35.6762</span>, <span class="nm">139.6503</span>)
+coords[<span class="nm">0</span>] = <span class="nm">0</span>
+<span class="cm"># ❌ TypeError: 'tuple' object does not support item assignment</span>
+
+<span class="cm"># Tuple as a dictionary key (lists CAN'T do this!)</span>
+city_map = {(<span class="nm">35.68</span>, <span class="nm">139.69</span>): <span class="st">"Tokyo"</span>, (<span class="nm">48.85</span>, <span class="nm">2.35</span>): <span class="st">"Paris"</span>}
+<span class="fn">print</span>(city_map[(<span class="nm">35.68</span>, <span class="nm">139.69</span>)])  <span class="cm"># "Tokyo"</span></pre>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--T)">Reference · Tuple Methods</div>
+    <h3>Tuples have only 2 methods — because they're immutable!</h3>
+    <table class="mtbl">
+      <thead><tr><th>Method</th><th>What it does</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>.count(x)</td><td>Count how many times x appears</td><td><code>(1,2,2,3).count(2)</code> → 2</td></tr>
+        <tr><td>.index(x)</td><td>Find position of first x</td><td><code>(10,20,30).index(20)</code> → 1</td></tr>
+      </tbody>
+    </table>
+    <div class="co ok"><div class="co-i">✅</div><div>Need more operations? Convert to a list: <code>lst = list(my_tuple)</code>, modify it, convert back with <code>tuple(lst)</code>.</div></div>
+  </div>
+
+  <div class="pnav"><button class="pnb" onclick="go('list')">← List</button><button class="pnb pnnext" onclick="go('set')">Next: Set →</button></div>
+</div>
+
+<!-- ══════════ SET ══════════ -->
+<div id="set" class="pg">
+  <div class="sh"><div class="sh-ico">🔵</div><div><h2 style="color:var(--S)">Python Sets</h2><p>Unique items only, unordered. Built for speed and maths-style operations.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--S)">Concept 1 · What is a Set?</div>
+    <h3>A set keeps only unique items — duplicates vanish automatically</h3>
+    <div class="ana"><div class="ana-i">🗳️</div><div><h4>Real life: Ballot box</h4><p>Each person votes once. Even if someone tries to vote twice, only one vote counts. Python sets work the same — drop in duplicates and they're quietly ignored.</p></div></div>
+<pre><span class="cm"># Curly braces { } with values = set</span>
+colours = {<span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span>}
+
+<span class="cm"># Duplicates removed automatically!</span>
+tags = {<span class="st">"python"</span>, <span class="st">"coding"</span>, <span class="st">"python"</span>, <span class="st">"tutorial"</span>, <span class="st">"coding"</span>}
+<span class="fn">print</span>(tags)  <span class="cm"># {'python', 'coding', 'tutorial'} — 3 unique items</span>
+
+<span class="cm"># Convert a list → set to deduplicate instantly</span>
+votes = [<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Alice"</span>, <span class="st">"Carol"</span>, <span class="st">"Bob"</span>]
+unique = <span class="fn">set</span>(votes)
+<span class="fn">print</span>(unique)  <span class="cm"># {'Alice', 'Bob', 'Carol'}</span></pre>
+    <div class="co danger"><div class="co-i">🚨</div><div><strong><code>{}</code> creates an empty DICTIONARY, not a set!</strong> For an empty set you must write <code>set()</code>. This is the #1 beginner gotcha with sets.</div></div>
+    <div class="pgrid">
+      <div class="prop"><div class="pl">Ordered</div><div class="pv pn">❌ No</div></div>
+      <div class="prop"><div class="pl">Changeable</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Duplicates</div><div class="pv pn">❌ No</div></div>
+      <div class="prop"><div class="pl">Syntax</div><div class="pv">set( )</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--S)">Concept 2 · Adding &amp; Removing Items</div>
+    <h3>Modify a set — but you can't access items by index</h3>
+    <p>Sets are unordered, so there's no "first" or "second" item. You can't do <code>my_set[0]</code>. But you can add/remove by value.</p>
+<pre>fruits = {<span class="st">"apple"</span>, <span class="st">"banana"</span>}
+
+fruits.add(<span class="st">"cherry"</span>)       <span class="cm"># add one item</span>
+fruits.update([<span class="st">"mango"</span>, <span class="st">"grape"</span>])  <span class="cm"># add multiple</span>
+
+fruits.remove(<span class="st">"banana"</span>)    <span class="cm"># error if missing!</span>
+fruits.discard(<span class="st">"pineapple"</span>) <span class="cm"># safe — no error if missing ✓</span>
+
+<span class="cm"># Membership check — blazing fast even with millions of items!</span>
+<span class="kw">if</span> <span class="st">"apple"</span> <span class="kw">in</span> fruits:
+    <span class="fn">print</span>(<span class="st">"Found it!"</span>)</pre>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--S)">Concept 3 · Set Operations — The Superpower</div>
+    <h3>Sets can do Venn diagram maths: union, intersection, difference</h3>
+<pre>A = {<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>, <span class="nm">5</span>}
+B = {<span class="nm">4</span>, <span class="nm">5</span>, <span class="nm">6</span>, <span class="nm">7</span>, <span class="nm">8</span>}
+
+A | B   <span class="cm"># Union — ALL unique items from both   → {1,2,3,4,5,6,7,8}</span>
+A &amp; B   <span class="cm"># Intersection — ONLY in BOTH          → {4, 5}</span>
+A - B   <span class="cm"># Difference — in A but NOT in B       → {1, 2, 3}</span>
+A ^ B   <span class="cm"># Symmetric diff — in one but not both → {1,2,3,6,7,8}</span></pre>
+    <div class="rl S"><div class="rl-lbl">👥 Social network — mutual friends</div><p>Find who Alice and Bob both follow: <code>mutual = alice_follows &amp; bob_follows</code>. Instagram literally does this for "People you might know". One line of Python!</p></div>
+    <div class="rl S" style="margin-top:8px"><div class="rl-lbl">🔐 App permissions</div><p>What features does Pro unlock over Free? <code>pro_only = pro_features - free_features</code>. Show users exactly what they're upgrading for.</p></div>
+  </div>
+
+  <!-- SET DEMO -->
+  <div class="card">
+    <div class="cnum" style="color:var(--S)">🎮 Try it — Set Operations Live</div>
+    <div class="demo">
+      <div class="brow">
+        <button class="btn bS" onclick="sD('dup')">Remove Duplicates</button>
+        <button class="btn bS" onclick="sD('uni')">Union (A | B)</button>
+        <button class="btn bS" onclick="sD('int')">Intersection (A &amp; B)</button>
+        <button class="btn bS" onclick="sD('dif')">Difference (A - B)</button>
+        <button class="btn bS" onclick="sD('mem')">Membership Check</button>
+        <button class="btn bG" onclick="sD('rst')">↺ Reset</button>
+      </div>
+      <div id="svis" style="margin-bottom:8px"></div>
+      <div class="dout"><div class="dlbl">Output</div><div id="sout"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--S)">Reference · Key Set Methods</div>
+    <table class="mtbl">
+      <thead><tr><th>Method</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>.add(x)</td><td>Add one item</td></tr>
+        <tr><td>.update(iter)</td><td>Add multiple items from a list, set, etc.</td></tr>
+        <tr><td>.remove(x)</td><td>Remove x — raises error if missing</td></tr>
+        <tr><td>.discard(x)</td><td>Remove x — no error if missing (safer!)</td></tr>
+        <tr><td>.union(s)</td><td>All items from both sets (same as |)</td></tr>
+        <tr><td>.intersection(s)</td><td>Only common items (same as &amp;)</td></tr>
+        <tr><td>.difference(s)</td><td>Items in this set but not in s (same as -)</td></tr>
+        <tr><td>.issubset(s)</td><td>True if all items here are also in s</td></tr>
+        <tr><td>.issuperset(s)</td><td>True if this set contains all of s</td></tr>
+        <tr><td>.isdisjoint(s)</td><td>True if the two sets share no items</td></tr>
+        <tr><td>.clear()</td><td>Remove all items</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pnav"><button class="pnb" onclick="go('tuple')">← Tuple</button><button class="pnb pnnext" onclick="go('dict')">Next: Dictionary →</button></div>
+</div>
+
+<!-- ══════════ DICT ══════════ -->
+<div id="dict" class="pg">
+  <div class="sh"><div class="sh-ico">📚</div><div><h2 style="color:var(--D)">Python Dictionaries</h2><p>Store data as key-value pairs. Look up any value instantly using its name.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 1 · What is a Dictionary?</div>
+    <h3>A dictionary maps a key to a value — like a real dictionary</h3>
+    <div class="ana"><div class="ana-i">📖</div><div><h4>Real life: A real dictionary</h4><p>Look up "apple" (key) → find "a round fruit" (value). In Python, <code>my_dict["name"]</code> gives the value stored under that key. Each key must be unique.</p></div></div>
+<pre>student = {
+    <span class="st">"name"</span>:   <span class="st">"Aiko"</span>,
+    <span class="st">"age"</span>:    <span class="nm">22</span>,
+    <span class="st">"grade"</span>:  <span class="st">"A"</span>,
+    <span class="st">"passed"</span>: <span class="kw">True</span>
+}
+<span class="fn">print</span>(student)
+<span class="fn">print</span>(<span class="fn">len</span>(student))  <span class="cm"># 4 key-value pairs</span></pre>
+    <div class="pgrid">
+      <div class="prop"><div class="pl">Ordered</div><div class="pv py">✅ (3.7+)</div></div>
+      <div class="prop"><div class="pl">Changeable</div><div class="pv py">✅ Yes</div></div>
+      <div class="prop"><div class="pl">Dup keys</div><div class="pv pn">❌ No</div></div>
+      <div class="prop"><div class="pl">Syntax</div><div class="pv">{k: v}</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 2 · Accessing Items</div>
+    <h3>Get values by key — two ways (one is much safer!)</h3>
+<pre>student = {<span class="st">"name"</span>: <span class="st">"Aiko"</span>, <span class="st">"age"</span>: <span class="nm">22</span>}
+
+<span class="cm"># Method 1: [ ] — crashes with KeyError if key missing</span>
+<span class="fn">print</span>(student[<span class="st">"name"</span>])           <span class="cm"># "Aiko"</span>
+
+<span class="cm"># Method 2: .get() — returns None or default if missing ✓</span>
+<span class="fn">print</span>(student.get(<span class="st">"score"</span>, <span class="st">"N/A"</span>))  <span class="cm"># "N/A" — no crash!</span>
+
+<span class="cm"># Get all keys, values, or pairs</span>
+student.keys()    <span class="cm"># dict_keys(["name", "age"])</span>
+student.values()  <span class="cm"># dict_values(["Aiko", 22])</span>
+student.items()   <span class="cm"># dict_items([("name","Aiko"),("age",22)])</span></pre>
+    <div class="co tip"><div class="co-i">💡</div><div>Always prefer <code>.get()</code> when you're not 100% sure the key exists. It prevents crashes in real apps.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 3 · Adding &amp; Changing Items</div>
+    <h3>Same syntax for both adding a new key and updating an existing one</h3>
+<pre>student = {<span class="st">"name"</span>: <span class="st">"Aiko"</span>, <span class="st">"age"</span>: <span class="nm">22</span>}
+
+student[<span class="st">"grade"</span>] = <span class="st">"A"</span>    <span class="cm"># ADD new key</span>
+student[<span class="st">"age"</span>]   = <span class="nm">23</span>    <span class="cm"># UPDATE existing key</span>
+
+<span class="cm"># update() — add or change multiple pairs at once</span>
+student.update({<span class="st">"city"</span>: <span class="st">"Tokyo"</span>, <span class="st">"grade"</span>: <span class="st">"A+"</span>})</pre>
+    <div class="rl D"><div class="rl-lbl">👤 User profile</div><p>User updates their bio: <code>profile["bio"] = "New bio"</code>. User changes email: <code>profile["email"] = "new@email.com"</code>. Same syntax for add and update!</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 4 · Removing Items</div>
+    <h3>Four ways to delete entries</h3>
+<pre>student = {<span class="st">"name"</span>: <span class="st">"Aiko"</span>, <span class="st">"age"</span>: <span class="nm">22</span>, <span class="st">"grade"</span>: <span class="st">"A"</span>}
+
+removed = student.pop(<span class="st">"grade"</span>)  <span class="cm"># remove key, return value → "A"</span>
+<span class="kw">del</span> student[<span class="st">"age"</span>]               <span class="cm"># delete by key</span>
+student.popitem()                 <span class="cm"># remove last inserted pair</span>
+student.clear()                   <span class="cm"># wipe everything → {}</span></pre>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 5 · Looping Through a Dictionary</div>
+    <h3>Loop over keys, values, or both at the same time</h3>
+<pre>student = {<span class="st">"name"</span>: <span class="st">"Aiko"</span>, <span class="st">"age"</span>: <span class="nm">22</span>, <span class="st">"grade"</span>: <span class="st">"A"</span>}
+
+<span class="kw">for</span> key <span class="kw">in</span> student:               <span class="cm"># loop over keys</span>
+    <span class="fn">print</span>(key)                    <span class="cm"># name, age, grade</span>
+
+<span class="kw">for</span> value <span class="kw">in</span> student.values():    <span class="cm"># loop over values</span>
+    <span class="fn">print</span>(value)                  <span class="cm"># Aiko, 22, A</span>
+
+<span class="kw">for</span> key, value <span class="kw">in</span> student.items():  <span class="cm"># ← MOST USEFUL!</span>
+    <span class="fn">print</span>(<span class="st">f"{key}: {value}"</span>)</pre>
+    <div class="rl D"><div class="rl-lbl">🧾 Receipt printer</div><p>Loop over an order dict and print each item + price: <code>for item, price in order.items(): print(f"{item}: ₹{price}")</code>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Concept 6 · Nested Dictionaries</div>
+    <h3>Dicts can contain other dicts — perfect for real-world data</h3>
+    <p>Almost all real data is nested. A school has students. Each student has details. A dict inside a dict handles this perfectly.</p>
+<pre>school = {
+    <span class="st">"s1"</span>: {<span class="st">"name"</span>: <span class="st">"Alice"</span>, <span class="st">"grade"</span>: <span class="st">"A"</span>},
+    <span class="st">"s2"</span>: {<span class="st">"name"</span>: <span class="st">"Bob"</span>,   <span class="st">"grade"</span>: <span class="st">"B"</span>},
+}
+<span class="cm"># Access nested values with chained keys</span>
+<span class="fn">print</span>(school[<span class="st">"s1"</span>][<span class="st">"name"</span>])   <span class="cm"># "Alice"</span>
+
+<span class="cm"># Loop through all students</span>
+<span class="kw">for</span> sid, info <span class="kw">in</span> school.items():
+    <span class="fn">print</span>(<span class="st">f"{info['name']} got {info['grade']}"</span>)</pre>
+    <div class="rl D"><div class="rl-lbl">🌐 JSON from an API</div><p>Every API response (weather, products, social media) comes back as nested JSON. Python loads it directly into a nested dictionary. This is how the real world works!</p></div>
+  </div>
+
+  <!-- DICT DEMO -->
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">🎮 Try it — Build a Student Record Live</div>
+    <div class="demo">
+      <div class="brow">
+        <button class="btn bD" onclick="dD('cre')">Create Student</button>
+        <button class="btn bD" onclick="dD('add')">Add Grade</button>
+        <button class="btn bD" onclick="dD('upd')">Update Age</button>
+        <button class="btn bD" onclick="dD('del')">Remove Grade</button>
+        <button class="btn bD" onclick="dD('lop')">Loop Items</button>
+        <button class="btn bD" onclick="dD('nes')">Nested Dict</button>
+        <button class="btn bG" onclick="dD('rst')">↺ Reset</button>
+      </div>
+      <div class="dout"><div class="dlbl">Output</div><div id="dout"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--D)">Reference · All Dictionary Methods</div>
+    <table class="mtbl">
+      <thead><tr><th>Method</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>.get(key, def)</td><td>Get value — returns def if key missing (no crash)</td></tr>
+        <tr><td>.keys()</td><td>Return all keys as a view</td></tr>
+        <tr><td>.values()</td><td>Return all values as a view</td></tr>
+        <tr><td>.items()</td><td>Return all (key, value) pairs</td></tr>
+        <tr><td>.update(d2)</td><td>Add/update from another dict</td></tr>
+        <tr><td>.pop(key)</td><td>Remove key and return its value</td></tr>
+        <tr><td>.popitem()</td><td>Remove and return last inserted pair</td></tr>
+        <tr><td>.setdefault(k,v)</td><td>Get value; insert k:v if key missing</td></tr>
+        <tr><td>.clear()</td><td>Remove all items</td></tr>
+        <tr><td>.copy()</td><td>Return a shallow copy</td></tr>
+        <tr><td>dict.fromkeys(ks)</td><td>Create dict from a list of keys</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pnav"><button class="pnb" onclick="go('set')">← Set</button><button class="pnb pnnext" onclick="go('cmp')">Next: Compare →</button></div>
+</div>
+
+<!-- ══════════ COMPARE ══════════ -->
+<div id="cmp" class="pg">
+  <div class="sh"><div class="sh-ico">⚖️</div><div><h2>Side-by-Side Comparison</h2><p>The full picture — and how to choose every time.</p></div></div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Full Feature Table</div>
+    <div class="tw"><table class="ct">
+      <thead><tr><th>Feature</th><th><span class="tag tL">📋 List</span></th><th><span class="tag tT2">📦 Tuple</span></th><th><span class="tag tS2">🔵 Set</span></th><th><span class="tag tD2">📚 Dict</span></th></tr></thead>
+      <tbody>
+        <tr><td>Ordered</td><td class="yes">✅ Yes</td><td class="yes">✅ Yes</td><td class="no">❌ No</td><td class="yes">✅ (3.7+)</td></tr>
+        <tr><td>Changeable</td><td class="yes">✅ Yes</td><td class="no">❌ No</td><td class="yes">✅ Yes</td><td class="yes">✅ Yes</td></tr>
+        <tr><td>Allows duplicates</td><td class="yes">✅ Yes</td><td class="yes">✅ Yes</td><td class="no">❌ Auto-removed</td><td class="na2">Values ✅ · Keys ❌</td></tr>
+        <tr><td>Access by</td><td><code>[index]</code></td><td><code>[index]</code></td><td class="na2">— not indexable</td><td><code>["key"]</code></td></tr>
+        <tr><td>Can be dict key</td><td class="no">❌</td><td class="yes">✅</td><td class="no">❌</td><td class="no">❌</td></tr>
+        <tr><td>Empty literal</td><td><code>[]</code></td><td><code>()</code></td><td><code>set()</code> ⚠️</td><td><code>{}</code> ⚠️</td></tr>
+        <tr><td>Lookup speed</td><td class="no">O(n) slow</td><td class="no">O(n) slow</td><td class="yes">O(1) fast ⚡</td><td class="yes">O(1) fast ⚡</td></tr>
+        <tr><td>Memory</td><td>Medium</td><td class="yes">Smallest 🏆</td><td>Larger</td><td>Largest</td></tr>
+        <tr><td>Math ops</td><td class="na2">—</td><td class="na2">—</td><td class="yes">✅ union, diff…</td><td class="na2">—</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Decision Guide</div>
+    <h3>Ask yourself one question — get your answer</h3>
+    <div class="dbox L"><div style="font-size:1.5rem">📋</div><div><h4>Use LIST when…</h4><p>Order matters AND you need to freely add, remove, or change items. Good for: playlists, shopping carts, search results, to-do lists.</p></div></div>
+    <div class="dbox T"><div style="font-size:1.5rem">📦</div><div><h4>Use TUPLE when…</h4><p>Data is fixed and must never change. Good for: coordinates, RGB colours, database rows, returning multiple values from a function.</p></div></div>
+    <div class="dbox S"><div style="font-size:1.5rem">🔵</div><div><h4>Use SET when…</h4><p>Uniqueness matters OR you need ultra-fast membership checks. Good for: tags, unique visitors, email blocklists, mutual-friend finding.</p></div></div>
+    <div class="dbox D"><div style="font-size:1.5rem">📚</div><div><h4>Use DICTIONARY when…</h4><p>Each piece of data needs a meaningful name. Good for: user profiles, product details, config settings, counting word frequency.</p></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Common Beginner Mistakes</div>
+    <div class="co danger"><div class="co-i">🚨</div><div><strong><code>{}</code> is a DICT, not a SET.</strong> Use <code>set()</code> for an empty set. This catches almost every beginner at least once.</div></div>
+    <div class="co warn" style="margin-top:8px"><div class="co-i">⚠️</div><div><strong>Single-item tuple needs a comma:</strong> <code>(42,)</code> is a tuple. <code>(42)</code> is just the number 42. The comma makes it a tuple.</div></div>
+    <div class="co warn" style="margin-top:8px"><div class="co-i">⚠️</div><div><strong>Lists can't be dictionary keys.</strong> <code>d[[1,2]]="x"</code> crashes. Use a tuple: <code>d[(1,2)]="x"</code>.</div></div>
+    <div class="co warn" style="margin-top:8px"><div class="co-i">⚠️</div><div><strong>Sets have no guaranteed order.</strong> Don't rely on the order items come out. Use <code>sorted(my_set)</code> if you need order.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="cnum" style="color:var(--mu)">Handy Conversions</div>
+<pre><span class="cm"># Deduplicate a list (order not preserved)</span>
+unique = <span class="fn">list</span>(<span class="fn">set</span>([<span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"a"</span>,<span class="st">"c"</span>]))
+
+<span class="cm"># Deduplicate, preserve order (Python 3.7+)</span>
+unique = <span class="fn">list</span>(dict.fromkeys([<span class="st">"b"</span>,<span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>]))  <span class="cm"># ["b","a","c"]</span>
+
+<span class="cm"># list ↔ tuple</span>
+<span class="fn">tuple</span>([<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>])  <span class="cm"># (1,2,3)</span>
+<span class="fn">list</span>((<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>))   <span class="cm"># [1,2,3]</span>
+
+<span class="cm"># dict → list of keys / values / pairs</span>
+d = {<span class="st">"a"</span>:<span class="nm">1</span>, <span class="st">"b"</span>:<span class="nm">2</span>}
+<span class="fn">list</span>(d)           <span class="cm"># ["a","b"]</span>
+<span class="fn">list</span>(d.values())  <span class="cm"># [1,2]</span>
+<span class="fn">list</span>(d.items())   <span class="cm"># [("a",1),("b",2)]</span></pre>
+  </div>
+  <div class="pnav"><button class="pnb" onclick="go('dict')">← Dictionary</button><button class="pnb pnnext" onclick="go('quiz')">Take the Quiz →</button></div>
+</div>
+
+<!-- ══════════ QUIZ ══════════ -->
+<div id="quiz" class="pg">
+  <div class="sh"><div class="sh-ico">🧠</div><div><h2>Quiz — Test Your Knowledge</h2><p>10 questions covering all four structures. Instant feedback on every answer.</p></div></div>
+  <div class="pbar"><div class="pfill" id="pf" style="width:0%"></div></div>
+  <div id="qbody"></div>
+  <div class="scard" id="sc">
+    <div class="sbig" id="sbig">0/10</div>
+    <div class="ssub">correct answers</div>
+    <div class="smsg" id="smsg"></div>
+    <button class="rbtn" onclick="buildQ()">↺ Retake Quiz</button>
+  </div>
+</div>
+
+<script>
+/* NAV */
+const PGS=['home','list','tuple','set','dict','cmp','quiz'];
+function go(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.nb')[PGS.indexOf(id)].classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* HELPERS */
+function log(id,h){const e=document.getElementById(id);const d=document.createElement('span');d.className='lo';d.innerHTML=h+'\n';e.appendChild(d);}
+function clr(id){document.getElementById(id).innerHTML='';}
+
+/* LIST DEMO */
+let pl=['Bohemian Rhapsody','Hotel California','Imagine'],si=0;
+const ns=['Shape of You','Blinding Lights','Stay','Watermelon Sugar','Levitating'];
+function rlv(){document.getElementById('lvis').innerHTML=pl.map((s,i)=>`<span class="vb vbL"><span class="idx">[${i}]</span>${s}</span>`).join('');}
+rlv();
+function lD(a){
+  if(a==='rst'){pl=['Bohemian Rhapsody','Hotel California','Imagine'];si=0;rlv();clr('lout');return;}
+  if(a==='add'){const s=ns[si++%ns.length];pl.push(s);log('lout',`<span class="cB">append("${s}")</span> → len=<span class="cA">${pl.length}</span>`);}
+  else if(a==='rem'){if(!pl.length){log('lout','<span class="cR">List empty!</span>');return;}const r=pl.pop();log('lout',`<span class="cR">pop()</span> removed <span class="cA">"${r}"</span>`);}
+  else if(a==='srt'){pl.sort();log('lout',`<span class="cB">sort()</span> → <span class="cG">[${pl.map(s=>`"${s}"`).join(', ')}]</span>`);}
+  else if(a==='cmp'){const f=pl.filter(s=>s.length<=10);log('lout',`<span class="cP">[s for s in pl if len(s)&lt;=10]</span>`);log('lout',`→ <span class="cG">[${f.map(s=>`"${s}"`).join(', ')}]</span>`);}
+  rlv();
+}
+
+/* SET DEMO */
+function sD(a){
+  const vis=document.getElementById('svis');
+  if(a==='rst'){vis.innerHTML='';clr('sout');return;}
+  const A=[1,2,3,4,5],B=[4,5,6,7,8];
+  if(a==='dup'){
+    const raw=[1,2,2,3,3,3,4],u=[...new Set(raw)];
+    vis.innerHTML='<div style="font-size:11px;color:#6b6960;margin-bottom:5px">Before → After set()</div>'
+      +'<div class="vrow">'+raw.map(x=>`<span class="vb vbR">${x}</span>`).join('')+'</div>'
+      +'<div style="font-size:1.1rem;margin:3px 0;color:#6b6960">↓</div>'
+      +'<div class="vrow">'+u.map(x=>`<span class="vb vbS">${x}</span>`).join('')+'</div>';
+    log('sout',`<span class="cB">set([1,2,2,3,3,3,4])</span> → <span class="cG">{${u.join(', ')}}</span> <span class="cMu">(${7-u.length} dupes removed)</span>`);return;
+  }
+  if(a==='mem'){log('sout',`A = <span class="cB">{${A}}</span>`);log('sout',`<span class="cP">3 in A</span> → <span class="cG">True</span>  <span class="cMu">⚡ O(1) — instant!</span>`);log('sout',`<span class="cP">9 in A</span> → <span class="cR">False</span>`);return;}
+  let res,lbl;
+  if(a==='uni'){res=[...new Set([...A,...B])];lbl='A | B — all unique from both';}
+  if(a==='int'){res=A.filter(x=>B.includes(x));lbl='A & B — items in BOTH';}
+  if(a==='dif'){res=A.filter(x=>!B.includes(x));lbl='A - B — in A but not in B';}
+  const ir=x=>res.includes(x);
+  vis.innerHTML='<div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">'
+    +`<div><div style="font-size:10px;color:#6b6960;margin-bottom:3px">Set A</div><div class="vrow">${A.map(x=>`<span class="vb ${ir(x)?'vbS':'vbL'}">${x}</span>`).join('')}</div></div>`
+    +`<div><div style="font-size:10px;color:#6b6960;margin-bottom:3px">Set B</div><div class="vrow">${B.map(x=>`<span class="vb ${ir(x)?'vbS':'vbT'}">${x}</span>`).join('')}</div></div>`
+    +`<div><div style="font-size:10px;color:#6b6960;margin-bottom:3px">Result</div><div class="vrow">${res.map(x=>`<span class="vb vbS">${x}</span>`).join('')}</div></div></div>`;
+  log('sout',`<span class="cG">{${res.join(', ')}}</span>`);log('sout',`<span class="cMu">${lbl}</span>`);
+}
+
+/* DICT DEMO */
+let ds=null;
+function dD(a){
+  if(a==='rst'){ds=null;clr('dout');return;}
+  if(a==='cre'){ds={name:'Aiko',age:22};clr('dout');log('dout',`<span class="cB">► student = {"name":"Aiko","age":22}</span>`);for(const[k,v]of Object.entries(ds))log('dout',`  <span class="cT">"${k}"</span> → <span class="cA">${JSON.stringify(v)}</span>`);return;}
+  if(!ds){log('dout','<span class="cMu">Click "Create Student" first.</span>');return;}
+  if(a==='add'){ds.grade='A';log('dout',`<span class="cB">► student["grade"]="A"</span>  <span class="cMu">← new key</span>`);log('dout',`  <span class="cT">"grade"</span> → <span class="cG">"A"</span>`);}
+  else if(a==='upd'){ds.age=23;log('dout',`<span class="cB">► student["age"]=23</span>  <span class="cMu">← updated</span>`);log('dout',`  <span class="cT">"age"</span> → <span class="cG">23</span>  <span class="cR" style="text-decoration:line-through">22</span>`);}
+  else if(a==='del'){delete ds.grade;log('dout',`<span class="cB">► del student["grade"]</span>`);log('dout',`  <span class="cR">"grade" removed ✓</span>`);}
+  else if(a==='lop'){log('dout',`<span class="cB">► for key,value in student.items():</span>`);for(const[k,v]of Object.entries(ds))log('dout',`    <span class="cT">"${k}"</span>: <span class="cA">${JSON.stringify(v)}</span>`);}
+  else if(a==='nes'){log('dout',`<span class="cB">► school={"s1":{"name":"Alice","grade":"A"},...}</span>`);log('dout',`  school["s1"]["name"] → <span class="cG">"Alice"</span>`);log('dout',`  school["s2"]["grade"] → <span class="cG">"B"</span>`);log('dout',`<span class="cMu">  Dicts inside dicts — very common in real apps!</span>`);}
+}
+
+/* QUIZ */
+const QS=[
+  {q:'Which syntax creates an empty SET?',opts:['{}','set()','[]','()'],ans:1,fb:'<code>{}</code> creates an empty <b>dictionary</b>! For an empty set you must write <code>set()</code>. The #1 beginner gotcha.'},
+  {q:'You have exam scores and want to find the top scorer. Which sorts highest-first?',opts:['scores.sort()','scores.reverse()','scores.sort(reverse=True)','sorted(scores)'],ans:2,fb:'<code>sort(reverse=True)</code> sorts descending (highest first). Then <code>scores[0]</code> is the winner.'},
+  {q:'A delivery app stores a driver\'s name, vehicle number, and phone — fixed info that never changes. Best structure?',opts:['List','Tuple ✓','Set','Dictionary'],ans:1,fb:'A tuple is perfect for fixed records. It\'s immutable (accidental changes are impossible) and uses less memory than a list.'},
+  {q:'Find songs that appear in BOTH your playlist and a friend\'s. Best approach?',opts:['Loop through both lists','Set intersection: mine & friends ✓','Use a dictionary','Sort both and compare'],ans:1,fb:'Set intersection (<code>A & B</code>) instantly returns items in both sets — one symbol instead of a nested loop!'},
+  {q:'What does list[-1] return?',opts:['Error — negative index invalid','Item at position 1','The last item ✓','Second-to-last item'],ans:2,fb:'Python supports negative indexing! <code>[-1]</code> is always the last item, <code>[-2]</code> is second-to-last. Very handy.'},
+  {q:'Which is the SAFE way to get a value from a dict without crashing?',opts:['user["score"]','user.get("score", 0) ✓','user.find("score")','user.fetch("score")'],ans:1,fb:'<code>.get(key, default)</code> returns the default (0 here) if the key doesn\'t exist, instead of raising a KeyError.'},
+  {q:'10,000 registered emails — fastest way to check if a new email is taken?',opts:['Search a list','Look in a dictionary','Check membership in a set ✓','Loop through a tuple'],ans:2,fb:'Set membership (<code>email in my_set</code>) is O(1) — instant regardless of size. A list would check up to 10,000 entries one by one.'},
+  {q:'What\'s wrong with: single = (42) ?',opts:['Nothing — valid tuple','It creates the integer 42, not a tuple ✓','Raises SyntaxError','Creates empty tuple'],ans:1,fb:'The comma defines a tuple, not the parentheses! <code>(42)</code> is just 42 in brackets. You need <code>(42,)</code>.'},
+  {q:'Best structure for a to-do app where users add and remove tasks freely?',opts:['Tuple — ordered sequence','List — ordered and changeable ✓','Set — unique items','Dictionary — key-value pairs'],ans:1,fb:'A list is perfect: tasks have order (for display), you can add with <code>.append()</code> and remove with <code>.remove()</code>.'},
+  {q:'What does [x*2 for x in [1,2,3]] produce?',opts:['[1,2,3]','[2,4,6] ✓','[[2],[4],[6]]','Error'],ans:1,fb:'List comprehension runs <code>x*2</code> for each item. So 1→2, 2→4, 3→6, giving <code>[2,4,6]</code>.'},
+];
+let answered=0,correct=0;
+function buildQ(){
+  answered=0;correct=0;
+  document.getElementById('pf').style.width='0%';
+  document.getElementById('sc').classList.remove('on');
+  document.getElementById('qbody').innerHTML=QS.map((q,i)=>`
+<div class="qcard" id="qc${i}">
+  <div class="qn">Question ${i+1} of ${QS.length}</div>
+  <div class="qt">${q.q}</div>
+  <div class="qopts">${q.opts.map((o,j)=>`<button class="qo" onclick="ans(${i},${j})">${o}</button>`).join('')}</div>
+  <div class="qfb" id="qf${i}"></div>
+</div>`).join('');
+}
+function ans(qi,oi){
+  const q=QS[qi];const c=document.getElementById('qc'+qi);
+  if(c.classList.contains('done'))return;
+  c.classList.add('done');
+  c.querySelectorAll('.qo').forEach((o,i)=>{o.disabled=true;if(i===q.ans)o.classList.add('ok');else if(i===oi)o.classList.add('wr');});
+  const right=oi===q.ans;if(right)correct++;answered++;
+  const fb=document.getElementById('qf'+qi);
+  fb.className='qfb on '+(right?'good':'bad');
+  fb.innerHTML=(right?'✅ Correct! ':'❌ Not quite — ')+q.fb;
+  document.getElementById('pf').style.width=(answered/QS.length*100)+'%';
+  if(answered===QS.length)setTimeout(()=>{
+    const sc=document.getElementById('sc');sc.classList.add('on');
+    document.getElementById('sbig').textContent=correct+'/'+QS.length;
+    const m=['Keep studying — you\'ll get there! 💪','Good effort! Review the missed sections.','Getting there! A bit more practice.','Solid! You\'ve got the fundamentals.','Very good! Nearly there.','Great work!','Excellent!','Impressive!','Outstanding!','Brilliant! 🌟','Perfect score! Python master! 🐍🏆'];
+    document.getElementById('smsg').textContent=m[correct];
+    sc.scrollIntoView({behavior:'smooth',block:'center'});
+  },500);
+}
+buildQ();
+</script>
+</body>
+</html>
